@@ -18,6 +18,7 @@
           Create new board...
         </a>
       </div>
+      <Modal></Modal>
     </div>
   </div>
 </template>
@@ -25,8 +26,10 @@
 
 <script>
 import { board } from "../api";
+import Modal from "./Modal.vue";
 
 export default {
+  components: { Modal },
   data() {
     return {
       loading: false,
@@ -39,8 +42,6 @@ export default {
   },
   updated() {
     this.$refs.boardItem.forEach((el) => {
-      console.log("$refs.boardItem", this.$refs.boardItem);
-      console.log("el", el);
       el.style.backgroundColor = el.dataset.bgcolor;
     });
   },
