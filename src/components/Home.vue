@@ -19,19 +19,29 @@
         </a>
       </div>
     </div>
+    <AddBoard
+      v-if="isAddBoard"
+      @close="isAddBoard = false"
+      @submit="onAddBoard"
+    />
   </div>
 </template>
 
 
 <script>
 import { board } from "../api";
+import AddBoard from "./AddModal.vue";
 
 export default {
+  components: {
+    AddBoard,
+  },
   data() {
     return {
       loading: false,
       boards: [],
       error: "",
+      isAddBoard: false,
     };
   },
   created() {
@@ -39,8 +49,6 @@ export default {
   },
   updated() {
     this.$refs.boardItem.forEach((el) => {
-      console.log("$refs.boardItem", this.$refs.boardItem);
-      console.log("el", el);
       el.style.backgroundColor = el.dataset.bgcolor;
     });
   },
@@ -57,7 +65,12 @@ export default {
         });
     },
     addBoard() {
-      console.log("addBoard()!!");
+      this.isAddBoard = true;
+    },
+    onAddBoard(title) {
+      // console.log(title);
+      // api call
+      board.create(title).then(() => this.fetchData());
     },
   },
 };
