@@ -19,7 +19,11 @@
         </a>
       </div>
     </div>
-    <AddBoard v-if="isAddBoard" @close="isAddBoard = false" />
+    <AddBoard
+      v-if="isAddBoard"
+      @close="isAddBoard = false"
+      @submit="onAddBoard"
+    />
   </div>
 </template>
 
@@ -62,6 +66,11 @@ export default {
     },
     addBoard() {
       this.isAddBoard = true;
+    },
+    onAddBoard(title) {
+      // console.log(title);
+      // api call
+      board.create(title).then(() => this.fetchData());
     },
   },
 };
