@@ -4,16 +4,11 @@
         <div>
             Board List:
             <div v-if="loading">Loading...</div>
-            <div v-else>Api result: <pre>{{apiRes}}</pre></div>
-            <div v-if="error"><pre>{{error}}</pre></div>
-            <ul>
-                <li>
-                    <router-link to="/b/1">Board 1</router-link>
-                </li>
-                    <li>
-                    <router-link to="/b/2">Board 2</router-link>
-                </li>
-            </ul>
+            <div v-else>
+                <div v-for="board in boards" :key="board.id">
+                    {{board}}
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -24,8 +19,7 @@ export default {
     data() {
         return {
             loading: false,
-            apiRes: '',
-            error: ''
+            boards: '',
         }
     },
     created() {
@@ -34,12 +28,12 @@ export default {
     methods: {
         fetchData() {
             this.loading = true
-            axios.get('http://localhost:3000/health')
+            axios.get('http://localhost:3000/boards')
                 .then(res => {
-                    this.apiRes = res.data
+                    this.boards = res.data
                 })
                 .catch(res => {
-                    this.error = res.response.data
+                    this.$router.replace('/login')
                 })
                 .finally(_=> {
                     this.loading = false
@@ -48,7 +42,6 @@ export default {
     }
 }
 </script>
-
 
 <style>
 
