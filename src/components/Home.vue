@@ -26,10 +26,8 @@
 
 <script>
 import { board } from "../api";
-import Modal from "./Modal.vue";
 
 export default {
-  components: { Modal },
   data() {
     return {
       loading: false,
