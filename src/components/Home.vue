@@ -18,21 +18,26 @@
           Create new board...
         </a>
       </div>
-      <Modal></Modal>
     </div>
+    <AddBoard v-if="isAddBoard" @close="isAddBoard = false" />
   </div>
 </template>
 
 
 <script>
 import { board } from "../api";
+import AddBoard from "./AddModal.vue";
 
 export default {
+  components: {
+    AddBoard,
+  },
   data() {
     return {
       loading: false,
       boards: [],
       error: "",
+      isAddBoard: false,
     };
   },
   created() {
@@ -56,7 +61,7 @@ export default {
         });
     },
     addBoard() {
-      console.log("addBoard()!!");
+      this.isAddBoard = true;
     },
   },
 };
