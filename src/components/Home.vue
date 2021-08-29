@@ -72,10 +72,8 @@ export default {
           this.loading = false;
         });
     },
-    onAddBoard(title) {
-      // console.log(title);
-      // api call
-      board.create(title).then(() => this.fetchData());
+    onAddBoard() {
+      this.fetchData();
     },
   },
 };
