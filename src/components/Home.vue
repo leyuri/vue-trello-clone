@@ -67,8 +67,11 @@ export default {
           this.loading = false;
         });
     },
+    close() {
+      this.$store.commit("SET_IS_ADD_BOARD", false);
+    },
     addBoard() {
-      // this.isAddBoard = true;
+      this.$store.commit("SET_IS_ADD_BOARD", true);
     },
     onAddBoard(title) {
       // console.log(title);
