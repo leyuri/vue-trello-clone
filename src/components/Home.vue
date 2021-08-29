@@ -34,7 +34,7 @@
 
 <script>
 import { board } from "../api";
-import AddBoard from "./AddModal.vue";
+import AddBoard from "./AddBoard.vue";
 import { mapState, mapMutations } from "vuex";
 
 export default {
