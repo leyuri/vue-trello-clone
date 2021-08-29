@@ -34,7 +34,7 @@
 
 <script>
 import { board } from "../api";
-import AddBoard from "./AddModal.vue";
+import AddBoard from "./AddBoard.vue";
 import { mapState, mapMutations } from "vuex";
 
 export default {
@@ -72,10 +72,8 @@ export default {
           this.loading = false;
         });
     },
-    onAddBoard(title) {
-      // console.log(title);
-      // api call
-      board.create(title).then(() => this.fetchData());
+    onAddBoard() {
+      this.fetchData();
     },
   },
 };
