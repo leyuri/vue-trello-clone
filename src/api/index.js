@@ -25,8 +25,8 @@ export const setAuthInHeader = token => {
     axios.defaults.headers.common['Authorization'] = token ? `Bearer ${token}` : null;
 }
 
-const { token } = localStorage
-if (token) setAuthInHeader(token)
+const { token } = localStorage // localhost에서 token 정보 읽어오기 
+if (token) setAuthInHeader(token) // ajax를 보내기 위한 request header에 token을 저장함
 
 
 export const board = {
