@@ -5,7 +5,6 @@
         <div class="board-header">
           <span class="board-title">{{ board.title }}</span>
         </div>
-        <pre>{{ board }}</pre>
         <div class="list-section-wrapper">
           <div class="list-section">
             <div
