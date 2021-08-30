@@ -1,8 +1,15 @@
 <template>
   <div class="add-card">
-    <form>
-      <input class="form-control" type="text" />
-      <button class="btn btn-success" type="submit">Add Card</button>
+    <form @submit.prevent="onSubmit">
+      <input
+        class="form-control"
+        type="text"
+        v-model="inputTitle"
+        ref="inputText"
+      />
+      <button class="btn btn-success" type="submit" :disabled="invalidInput">
+        Add Card
+      </button>
       <a class="cancel-add-btn" href="" @click.prevent="$emit('close')"
         >&times;</a
       >
@@ -16,6 +23,20 @@ export default {
     return {
       inputTitle: "",
     };
+  },
+  computed: {
+    invalidInput() {
+      //   console.log("Test", !this.inputT itle.trim());
+      return !this.inputTitle.trim();
+    },
+  },
+  mounted() {
+    this.$refs.inputText.focus();
+  },
+  methods: {
+    onSubmit() {
+      console.log("onSubmit!!");
+    },
   },
 };
 </script>
