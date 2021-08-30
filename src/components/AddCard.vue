@@ -32,10 +32,18 @@ export default {
   },
   mounted() {
     this.$refs.inputText.focus();
+    this.setupClickOutside(this.$el);
   },
   methods: {
     onSubmit() {
       console.log("onSubmit!!");
+    },
+    setupClickOutside(el) {
+      document.querySelector("body").addEventListener("click", (e) => {
+        console.log("test!!!!!!");
+        if (el.contains(e.target)) return;
+        this.$emit("close");
+      });
     },
   },
 };
