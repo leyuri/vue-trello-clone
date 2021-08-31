@@ -4,8 +4,8 @@
       <div class="list-header-title">{{ data.title }}</div>
     </div>
     <div>
-      <div v-for="card in data.cards" :key="card.id">
-        {{ card.title }}
+      <div :data-list-id="data.id">
+        <CardItem v-for="card in data.cards" :key="`${card.id}`" :data="card" />
       </div>
     </div>
     <div v-if="isAddCard">
@@ -21,9 +21,10 @@
 
 <script>
 import AddCard from "./AddCard.vue";
+import CardItem from "./CardItem.vue";
 
 export default {
-  components: { AddCard },
+  components: { AddCard, CardItem },
   props: ["data"],
   data() {
     return {
