@@ -36,7 +36,7 @@ export default {
     return {
       bid: 0,
       loading: false,
-      dragularCards: null,
+      dragularCards: null, // 상태 변수 추가
     };
   },
   computed: {
@@ -48,13 +48,14 @@ export default {
     this.fetchData();
   },
   updated() {
-    if (this.dragularCards) this.dragularCards.destroy();
+    if (this.dragularCards) this.dragularCards.destroy(); // destory 는 만들었던 객체를 삭제한다.
 
     this.dragularCards = dragula([
       ...Array.from(this.$el.querySelectorAll(".card-list")),
     ]).on("drop", (el, wrapper, target, siblings) => {
       //   debugger;
       //   console.log("drop");
+      //   console.log("el.dataset.cardId", el.dataset.cardId);
       const targetCard = {
         id: el.dataset.cardId * 1,
         pos: 65535,
@@ -66,6 +67,7 @@ export default {
       Array.from(wrapper.querySelectorAll(".card-item")).forEach(
         (el, idx, arr) => {
           //   debugger;
+          //   console.log("idx", idx);
           const cardId = el.dataset.cardId * 1;
           if (cardId == targetCard.id) {
             prevCard =
@@ -92,7 +94,7 @@ export default {
       else if (prevCard && nextCard)
         targetCard.pos = (prevCard.pos + nextCard.pos) / 2;
 
-      console.log("targetCard", targetCard);
+      //   console.log("targetCard", targetCard);
       this.UPDATE_CARD(targetCard);
     });
   },

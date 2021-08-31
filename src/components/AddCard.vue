@@ -48,13 +48,14 @@ export default {
       );
     },
     newCardPos() {
-      console.log("tetsttttt", this.$store.state.board.lists[0]);
-      const cardList = this.$store.state.board.lists.filter(
+      //   console.log("tetsttttt", this.$store.state.board.lists[0]);
+      const currentList = this.$store.state.board.lists.filter(
         (l) => l.id === this.listId
       )[0];
-      if (!cardList) return 65535;
-      const { cards } = cardList;
-      console.log("cards.length", cards.length);
+      if (!currentList) return 65535;
+      const { cards } = currentList;
+      //   console.log("cards", cards);
+      //   console.log("cards.length", cards.length);
       if (!cards.length) return 65535;
       return cards[cards.length - 1].pos * 2;
     },
