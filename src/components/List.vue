@@ -4,7 +4,7 @@
       <div class="list-header-title">{{ data.title }}</div>
     </div>
     <div>
-      <div :data-list-id="data.id">
+      <div class="card-list" :data-list-id="data.id">
         <CardItem v-for="card in data.cards" :key="`${card.id}`" :data="card" />
       </div>
     </div>
@@ -70,7 +70,6 @@ export default {
 }
 .card-list {
   flex: 1 1 auto;
-  overflow-y: scroll;
 }
 .empty-card-item {
   height: 10px;
