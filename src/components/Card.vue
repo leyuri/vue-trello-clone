@@ -1,37 +1,42 @@
 <template>
-  <div>
+  <Modal>
     Card
     <div v-if="loading">loading board...</div>
     <div v-else>
-        <div>cid: {{cid}}</div>
+      <div>cid: {{ cid }}</div>
     </div>
-  </div>
+  </Modal>
 </template>
 
 <script>
+import Modal from "./Modal.vue";
+
 export default {
+  components: {
+    Modal,
+  },
   data() {
     return {
       cid: 0,
-      loading: false
-    }
+      loading: false,
+    };
   },
   watch: {
-    '$route': {
-      handler: 'fetchData',
-      immediate: true
-    }
+    $route: {
+      handler: "fetchData",
+      immediate: true,
+    },
   },
   methods: {
     fetchData() {
-      this.loading = true
+      this.loading = true;
       setTimeout(() => {
-        this.cid = this.$route.params.cid
-        this.loading = false
-      }, 500)
-    }
-  }
-}
+        this.cid = this.$route.params.cid;
+        this.loading = false;
+      }, 500);
+    },
+  },
+};
 </script>
 
 <style>
