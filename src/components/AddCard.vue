@@ -42,9 +42,21 @@ export default {
     onSubmit() {
       if (this.invalidInput) return;
       const { inputTitle, listId } = this;
-      this.ADD_CARD({ title: inputTitle, listId: listId }).finally(
+      const pos = this.newCardPos();
+      this.ADD_CARD({ title: inputTitle, listId, pos }).finally(
         () => (this.inputTitle = "")
       );
+    },
+    newCardPos() {
+      console.log("tetsttttt", this.$store.state.board.lists[0]);
+      const cardList = this.$store.state.board.lists.filter(
+        (l) => l.id === this.listId
+      )[0];
+      if (!cardList) return 65535;
+      const { cards } = cardList;
+      console.log("cards.length", cards.length);
+      if (!cards.length) return 65535;
+      return cards[cards.length - 1].pos * 2;
     },
     setupClickOutside(el) {
       document.querySelector("body").addEventListener("click", (e) => {
