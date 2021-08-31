@@ -1,8 +1,9 @@
 const state = {
+    token: null,
     isAddBoard: false,
     boards: [],
     board: {},
-    token: null
+    card: {},
 }
 
 export default state
