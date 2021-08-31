@@ -19,7 +19,7 @@ const actions = {
         })
     },
     ADD_CARD({ dispatch, state }, { title, listId, pos }) {
-        api.card.create(title, listId, pos)
+        return api.card.create(title, listId, pos)
             .then(_ => dispatch('FETCH_BOARD', { id: state.board.id }))
     },
 }
