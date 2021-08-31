@@ -21,8 +21,11 @@
         cols="30"
         rows="3"
         placeholder="Add a more detailed description..."
-        readonly
+        :readonly="!toggleDesc"
+        @click="toggleDesc = true"
+        @blur="onBlurDesc"
         v-model="card.description"
+        ref="inputDesc"
       ></textarea>
     </div>
     <div slot="footer"></div>
@@ -40,6 +43,7 @@ export default {
   data() {
     return {
       toggleTitle: false,
+      toggleDesc: false,
     };
   },
   computed: {
@@ -61,10 +65,18 @@ export default {
       this.FETCH_CARD({ id });
     },
     onBlurTitle() {
-      this.toggleTitle;
+      this.toggleTitle = false;
       const title = this.$refs.inputTitle.value.trim(); // 공백체크
       if (!title) return;
       this.UPDATE_CARD({ id: this.card.id, title }).then(() =>
+        this.fetchCard()
+      );
+    },
+    onBlurDesc() {
+      this.inputDesc = false;
+      const description = this.$refs.inputDesc.value.trim(); // 공백체크
+      if (!description) return;
+      this.UPDATE_CARD({ id: this.card.id, description }).then(() =>
         this.fetchCard()
       );
     },
