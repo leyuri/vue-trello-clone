@@ -29,7 +29,7 @@ const actions = {
         return api.list.create({ title, boardId, pos })
             .then(() => dispatch('FETCH_BOARD', { id: state.board.id }))
     },
-    UPDATE_List({ dispatch, state }, { id, title, pos }) {
+    UPDATE_LIST({ dispatch, state }, { id, title, pos }) {
         return api.list.update(id, { title, pos })
             .then(() => dispatch('FETCH_BOARD', { id: state.board.id }))
     },
