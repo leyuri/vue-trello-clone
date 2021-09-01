@@ -25,8 +25,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import List from "./List.vue";
-import dragula from "dragula";
-import "dragula/dist/dragula.css";
+import dragger from "../utils/dragger";
 
 export default {
   components: {
@@ -36,7 +35,7 @@ export default {
     return {
       bid: 0,
       loading: false,
-      dragularCards: null, // 상태 변수 추가
+      cDragger: null, // 상태 변수 추가
     };
   },
   computed: {
@@ -48,55 +47,7 @@ export default {
     this.fetchData();
   },
   updated() {
-    if (this.dragularCards) this.dragularCards.destroy(); // destory 는 만들었던 객체를 삭제한다.
-
-    this.dragularCards = dragula([
-      ...Array.from(this.$el.querySelectorAll(".card-list")),
-    ]).on("drop", (el, wrapper, target, siblings) => {
-      //   debugger;
-      //   console.log("drop");
-      //   console.log("el.dataset.cardId", el.dataset.cardId);
-      const targetCard = {
-        id: el.dataset.cardId * 1,
-        pos: 65535,
-      };
-
-      let prevCard = null;
-      let nextCard = null;
-
-      Array.from(wrapper.querySelectorAll(".card-item")).forEach(
-        (el, idx, arr) => {
-          //   debugger;
-          //   console.log("idx", idx);
-          const cardId = el.dataset.cardId * 1;
-          if (cardId == targetCard.id) {
-            prevCard =
-              idx > 0
-                ? {
-                    id: arr[idx - 1].dataset.cardId * 1,
-                    pos: arr[idx - 1].dataset.cardPos * 1,
-                  }
-                : null;
-
-            nextCard =
-              idx < arr.length - 1
-                ? {
-                    id: arr[idx + 1].dataset.cardId * 1,
-                    pos: arr[idx + 1].dataset.cardPos * 1,
-                  }
-                : null;
-          }
-        }
-      );
-
-      if (!prevCard && nextCard) targetCard.pos = nextCard.pos / 2;
-      else if (!nextCard && prevCard) targetCard.pos = prevCard.pos * 2;
-      else if (prevCard && nextCard)
-        targetCard.pos = (prevCard.pos + nextCard.pos) / 2;
-
-      //   console.log("targetCard", targetCard);
-      this.UPDATE_CARD(targetCard);
-    });
+    this.setCardDragabble();
   },
   methods: {
     ...mapActions(["FETCH_BOARD", "UPDATE_CARD"]),
@@ -105,6 +56,33 @@ export default {
       this.FETCH_BOARD({ id: this.$route.params.bid }).then(
         () => (this.loading = false)
       );
+    },
+    setCardDragabble() {
+      if (this.cDragger) this.cDragger.destroy();
+      this.cDragger = dragger.init(
+        Array.from(this.$el.querySelectorAll(".card-list"))
+      );
+      this.cDragger.on("drop", (el, wrapper, target, sibling) => {
+        // console.log("1_el", el);
+        // console.log("wrapper", wrapper);
+        const targetCard = {
+          id: el.dataset.cardId * 1,
+          pos: 65535,
+        };
+        // console.log("1_targetCard", targetCard);
+        const { prev, next } = dragger.sibling({
+          el,
+          wrapper,
+          candidates: Array.from(wrapper.querySelectorAll(".card-item")),
+          type: "card",
+        });
+
+        if (!prev && next) targetCard.pos = next.pos / 2;
+        else if (!next && prev) targetCard.pos = prev.pos * 2;
+        else if (next && prev) targetCard.pos = (prev.pos + next.pos) / 2;
+
+        this.UPDATE_CARD(targetCard);
+      });
     },
   },
 };
