@@ -21,6 +21,9 @@ export default {
     }),
     ...mapGetters(["isAuth"]),
   },
+  watch: {
+    bodyColor: "updateTheme",
+  },
   mounted() {
     this.updateTheme();
   },
