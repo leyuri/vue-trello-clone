@@ -29,6 +29,7 @@
               class="list-wrapper"
               v-for="list in board.lists"
               :key="list.pos"
+              :data-list-id="list.id"
             >
               <List :data="list" />
             </div>
@@ -62,6 +63,7 @@ export default {
       bid: 0,
       loading: false,
       cDragger: null, // 상태 변수 추가
+      lDragger: null,
       isEditTitle: false,
       inputTitle: "",
     };
@@ -81,10 +83,16 @@ export default {
   },
   updated() {
     this.setCardDragabble();
+    this.setListDragabble();
   },
   methods: {
     ...mapMutations(["SET_THEME", "SET_IS_SHOW_BOARD_SETTINGS"]),
-    ...mapActions(["FETCH_BOARD", "UPDATE_CARD", "UPDATE_BOARD"]),
+    ...mapActions([
+      "FETCH_BOARD",
+      "UPDATE_CARD",
+      "UPDATE_BOARD",
+      "UPDATE_LIST",
+    ]),
     fetchData() {
       this.loading = true;
       return this.FETCH_BOARD({ id: this.$route.params.bid }).then(
@@ -99,6 +107,7 @@ export default {
       this.cDragger.on("drop", (el, wrapper, target, sibling) => {
         const targetCard = {
           id: el.dataset.cardId * 1,
+          listId: wrapper.dataset.listId * 1, // listId 가 있어야 리스트 간 카드 이동 가능!
           pos: 65535,
         };
         const { prev, next } = dragger.sibling({
@@ -111,8 +120,30 @@ export default {
         if (!prev && next) targetCard.pos = next.pos / 2;
         else if (!next && prev) targetCard.pos = prev.pos * 2;
         else if (next && prev) targetCard.pos = (prev.pos + next.pos) / 2;
-
         this.UPDATE_CARD(targetCard);
+      });
+    },
+    setListDragabble() {
+      if (this.lDragger) this.lDragger.destroy();
+      this.lDragger = dragger.init(
+        Array.from(this.$el.querySelectorAll(".list-section"))
+      );
+      this.lDragger.on("drop", (el, wrapper, target, sibling) => {
+        const targetList = {
+          id: el.dataset.listId * 1,
+          pos: 65535,
+        };
+        const { prev, next } = dragger.sibling({
+          el,
+          wrapper,
+          candidates: Array.from(wrapper.querySelectorAll(".list")),
+          type: "list",
+        });
+
+        if (!prev && next) targetList.pos = next.pos / 2;
+        else if (!next && prev) targetList.pos = prev.pos * 2;
+        else if (next && prev) targetList.pos = (prev.pos + next.pos) / 2;
+        this.UPDATE_LIST(targetList);
       });
     },
     onShowSettings() {
