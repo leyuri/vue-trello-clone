@@ -21,7 +21,7 @@ const actions = {
     DELETE_BOARD(_, { id }) {
         return api.board.destory(id)
     },
-    UPDATE_BOARD(ctx, { id, title, bgColor }) {
+    UPDATE_BOARD({ dispatch, state }, { id, title, bgColor }) {
         return api.board.update(id, { title, bgColor })
             .then(() => dispatch('FETCH_BOARD', { id: state.board.id }))
     },
