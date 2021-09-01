@@ -25,6 +25,7 @@
 <script>
 import { mapState, mapActions } from "vuex";
 import List from "./List.vue";
+import dragger from "../utils/dragger";
 
 export default {
   components: {
@@ -34,6 +35,7 @@ export default {
     return {
       bid: 0,
       loading: false,
+      cDragger: null, // 상태 변수 추가
     };
   },
   computed: {
@@ -44,13 +46,43 @@ export default {
   created() {
     this.fetchData();
   },
+  updated() {
+    this.setCardDragabble();
+  },
   methods: {
-    ...mapActions(["FETCH_BOARD"]),
+    ...mapActions(["FETCH_BOARD", "UPDATE_CARD"]),
     fetchData() {
       this.loading = true;
       this.FETCH_BOARD({ id: this.$route.params.bid }).then(
         () => (this.loading = false)
       );
+    },
+    setCardDragabble() {
+      if (this.cDragger) this.cDragger.destroy();
+      this.cDragger = dragger.init(
+        Array.from(this.$el.querySelectorAll(".card-list"))
+      );
+      this.cDragger.on("drop", (el, wrapper, target, sibling) => {
+        // console.log("1_el", el);
+        // console.log("wrapper", wrapper);
+        const targetCard = {
+          id: el.dataset.cardId * 1,
+          pos: 65535,
+        };
+        // console.log("1_targetCard", targetCard);
+        const { prev, next } = dragger.sibling({
+          el,
+          wrapper,
+          candidates: Array.from(wrapper.querySelectorAll(".card-item")),
+          type: "card",
+        });
+
+        if (!prev && next) targetCard.pos = next.pos / 2;
+        else if (!next && prev) targetCard.pos = prev.pos * 2;
+        else if (next && prev) targetCard.pos = (prev.pos + next.pos) / 2;
+
+        this.UPDATE_CARD(targetCard);
+      });
     },
   },
 };
