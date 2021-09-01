@@ -3,6 +3,10 @@ import router from '../router'
 
 const DOMAIN = 'http://localhost:3000'
 const UNAUTHORIZED = 401
+const NOTFOUND = 404
+const onNotfound = () => {
+    router.push(`/`)
+}
 const onUnauthorized = () => {
     router.push("/login").catch(() => { });
 }
@@ -17,6 +21,9 @@ const request = (method, url, data) => {
             const { status } = result.response
             console.log("status", status);
             if (status === UNAUTHORIZED) onUnauthorized()
+            else if (status === NOTFOUND) {
+                onNotfound()
+            }
             throw result.response
         })
 }
