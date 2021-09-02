@@ -61,8 +61,8 @@ export const list = {
         return request('put', `/lists/${id}`, payload)
     },
     destory(id) {
-        return request('delete', `lists/${id}`)
-    }
+        return request('delete', `/lists/${id}`)
+    },
 }
 
 

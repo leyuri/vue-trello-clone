@@ -3,7 +3,7 @@
     <div class="list-header">
       <input
         v-if="isEditTitle"
-        class="from-control input-title"
+        class="form-control input-title"
         type="text"
         ref="inputTitle"
         v-model="inputTitle"
@@ -13,6 +13,9 @@
       <div v-else class="list-header-title" @click="onClickTitle">
         {{ data.title }}
       </div>
+      <a class="delete-list-btn" href="" @click.prevent="onDeleteList"
+        >&times;</a
+      >
     </div>
     <div>
       <div class="card-list" :data-list-id="data.id">
@@ -49,7 +52,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions(["UPDATE_LIST"]),
+    ...mapActions(["UPDATE_LIST", "DELETE_LIST"]),
     onClickTitle() {
       this.isEditTitle = true;
       this.$nextTick(() => this.$refs.inputTitle.focus());
@@ -68,6 +71,10 @@ export default {
       if (title === this.data.title) return;
 
       this.UPDATE_LIST({ id, title });
+    },
+    onDeleteList() {
+      if (!confirm(`Delete ${this.data.title} list?`)) return;
+      this.DELETE_LIST({ id: this.data.id });
     },
   },
 };
