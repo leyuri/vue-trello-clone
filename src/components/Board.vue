@@ -9,8 +9,8 @@
             type="text"
             v-model="inputTitle"
             ref="inputTitle"
-            @blur="onSubmitTitle"
             @keyup.enter="onSubmitTitle"
+            @blur="onSubmitTitle"
           />
           <span v-else class="board-title" @click="onClickTitle">{{
             board.title
@@ -125,9 +125,15 @@ export default {
     },
     setListDragabble() {
       if (this.lDragger) this.lDragger.destroy();
+
+      const options = {
+        invalid: (el, handle) => !/^list/.test(handle.className),
+      };
       this.lDragger = dragger.init(
-        Array.from(this.$el.querySelectorAll(".list-section"))
+        Array.from(this.$el.querySelectorAll(".list-section")),
+        options
       );
+
       this.lDragger.on("drop", (el, wrapper, target, sibling) => {
         const targetList = {
           id: el.dataset.listId * 1,
