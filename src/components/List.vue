@@ -19,7 +19,12 @@
     </div>
     <div>
       <div class="card-list" :data-list-id="data.id">
-        <CardItem v-for="card in data.cards" :key="`${card.id}`" :data="card" />
+        <div v-show="!data.cards.length" class="empty-card-item"></div>
+        <CardItem
+          v-for="card in data.cards"
+          :key="`${data.id}-${card.pos}`"
+          :data="card"
+        />
       </div>
     </div>
     <div v-if="isAddCard">
